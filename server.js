@@ -13,7 +13,7 @@ spotifyApi.clientCredentialsGrant()
   .then((data) => {
     spotifyApi.setAccessToken(data.body['access_token']);
     getArtist();
-  },)
+  })
   .catch(console.error);
 
 function getArtist() {
