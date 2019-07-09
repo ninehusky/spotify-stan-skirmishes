@@ -1,3 +1,4 @@
+'use strict'; // i think i should have used the model in cse 154
 const SpotifyWebApi = require('spotify-web-api-node');
 const dotenv = require('dotenv').config();
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -32,27 +33,40 @@ function getArtist() {
     .catch(console.error);
 }
 
-// TODO: filter albums to eliminate 'duplicates', eliminate singles
 function getAlbumIds(id) {
   spotifyApi.getArtistAlbums(id, { include_groups: 'album', limit: 50 })
     .then((data) => {
       return data.body.items;
     })
     .then((albums) => {
-      ids = [];
+      let albumObjs = [];
       albums.forEach((album) => {
-        if (album['album_type'] === 'album') {
-          ids.push(album.id);
+        // console.log(album);
+        let alreadyIn = false;
+        albumObjs.forEach((albumObj) => {
+          if (albumObj.name === album.name) {
+            alreadyIn = true;
+          }
+        })
+        if (album['album_type'] === 'album' && !alreadyIn) {
+          let albumObj = {
+            name: album['name'],
+            id: album['id'],
+            imgUrl: album['images'][0]['url'], // pick largest image in database
+            songs: []
+          }
+          albumObjs.push(albumObj);
         }
       });
-      return ids;
+      console.log(albumObjs);
+      return albumObjs;
     })
-    .then(getSongs)
+    // .then(getSongs)
     .catch(console.error);
 }
 
 // oh no
-function getSongs(ids) {
+function getSongs(albumObjs) {
   let promises = [];
   let songNames = new Set();
 
@@ -60,7 +74,7 @@ function getSongs(ids) {
     promises.push(
       spotifyApi.getAlbumTracks(id)
         .then((albumData) => {
-          songs = albumData.body.items;
+          let songs = albumData.body.items;
           songs.forEach((song) => {
             if (!song.name.toLowerCase().includes('remix')
                 && !song.name.toLowerCase().includes('edited')
@@ -92,5 +106,5 @@ function promptUser(songNames) {
     song1: song1,
     song2: song2
   };
-  console.log(data);
+  // console.log(data);
 }
