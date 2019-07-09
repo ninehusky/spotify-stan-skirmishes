@@ -9,6 +9,7 @@ rather rough outline/todo:
 - learn Markdown
 - update this file
 - turn songNames into a set of Song objects
+- allow user to pass in blacklisted keywords
 - make this an actual server
 - uncover inevitable security flaw
 - client side

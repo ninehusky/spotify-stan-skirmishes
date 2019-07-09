@@ -3,6 +3,14 @@ const dotenv = require('dotenv').config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
+let artist;
+if (process.argv[2]) { // if the artist's name is passed as command line arg
+  artist = process.argv[2];
+} else {
+  console.log('Artist must be passed in as command line arg!');
+  process.exit();
+}
+
 let spotifyApi = new SpotifyWebApi({
   clientId: CLIENT_ID,
   clientSecret: CLIENT_SECRET
@@ -17,7 +25,7 @@ spotifyApi.clientCredentialsGrant()
   .catch(console.error);
 
 function getArtist() {
-  spotifyApi.searchArtists('kanye')
+  spotifyApi.searchArtists(artist)
     .then((data) => {
       getAlbumIds(data["body"]["artists"]["items"][0]["id"]);
     })
@@ -26,7 +34,7 @@ function getArtist() {
 
 // TODO: filter albums to eliminate 'duplicates', eliminate singles
 function getAlbumIds(id) {
-  spotifyApi.getArtistAlbums(id, { limit: 50 })
+  spotifyApi.getArtistAlbums(id, { include_groups: 'album', limit: 50 })
     .then((data) => {
       return data.body.items;
     })
