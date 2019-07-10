@@ -58,19 +58,18 @@ function getAlbumIds(id) {
           albumObjs.push(albumObj);
         }
       });
-      console.log(albumObjs);
       return albumObjs;
     })
-    // .then(getSongs)
+    .then(getSongs)
     .catch(console.error);
 }
 
 // oh no
 function getSongs(albumObjs) {
   let promises = [];
-  let songNames = new Set();
-
-  ids.forEach((id) => {
+  let songObjs = [];
+  albumObjs.forEach((album) => {
+    let id = album.id;
     promises.push(
       spotifyApi.getAlbumTracks(id)
         .then((albumData) => {
@@ -80,7 +79,12 @@ function getSongs(albumObjs) {
                 && !song.name.toLowerCase().includes('edited')
                 && !song.name.toLowerCase().includes(' live at')
                 && !song.name.toLowerCase().includes('session')) {
-              songNames.add(song.name);
+                let songObj = {
+                  name: song.name,
+                  album: album.name,
+                  imgUrl: album.imgUrl
+                }
+                songObjs.push(songObj);
             }
           });
         })
@@ -88,8 +92,26 @@ function getSongs(albumObjs) {
       );
   });
   Promise.all(promises).then(() => { // maybe i should have implemented this everywhere?
-    promptUser(songNames)
+    cleanse(songObjs);
+    songObjs.forEach((song) => {
+      console.log(song.name); // for debugging
+    });
   });
+}
+
+// ugh. was pain cause i cant read documentation but this gets rid of 'duplicate' entries for songs
+// because we're not using a set anymore.
+function cleanse(songObjs) {
+  let originalSize = songObjs.length;
+  for (let i = songObjs.length - 1; i >= 0; i--) {
+    let firstSongName = songObjs[i].name;
+    for (let j = i - 1; j >= 0; j--) {
+      let secondSongName = songObjs[j].name;
+      if (firstSongName === secondSongName) {
+        songObjs.splice(j, 1);
+      }
+    }
+  }
 }
 
 // maybe store artist data in cookies or as global, expensive operations to be calling api
