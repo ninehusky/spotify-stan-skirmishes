@@ -78,7 +78,7 @@ function getSongs(albumObjs) {
             if (!song.name.toLowerCase().includes('remix')
                 && !song.name.toLowerCase().includes('edited')
                 && !song.name.toLowerCase().includes(' live at')
-                && !song.name.toLowerCase().includes('session')) {
+                && !song.name.toLowerCase().includes(' session')) {
                 let songObj = {
                   name: song.name,
                   album: album.name,
@@ -94,21 +94,16 @@ function getSongs(albumObjs) {
   Promise.all(promises).then(() => { // maybe i should have implemented this everywhere?
     cleanse(songObjs);
     songObjs.forEach((song) => {
-      console.log(song.name); // for debugging
+      console.log(song.name);
     });
   });
 }
 
-// ugh. was pain cause i cant read documentation but this gets rid of 'duplicate' entries for songs
-// because we're not using a set anymore.
 function cleanse(songObjs) {
-  let originalSize = songObjs.length;
-  for (let i = songObjs.length - 1; i >= 0; i--) {
-    let firstSongName = songObjs[i].name;
-    for (let j = i - 1; j >= 0; j--) {
-      let secondSongName = songObjs[j].name;
-      if (firstSongName === secondSongName) {
-        songObjs.splice(j, 1);
+  for (let i = 0; i < songObjs.length; i++) {
+    for (let j = i + 1; j < songObjs.length; j++) {
+      if (songObjs[i].name === songObjs[j].name) {
+        songObjs.splice(j--, 1);
       }
     }
   }
