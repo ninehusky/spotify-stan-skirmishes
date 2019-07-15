@@ -6,13 +6,18 @@ give you two of that artist's songs and ask you to gauge which one is better. Po
 in the future might involve some sort of bracket a la Brackify?
 
 rather rough outline/todo:
+- get list of songs
+- populate song list
+- intro page
+- actual choice/bracket (via React?)
 - learn Markdown
-- update this file
-- turn songNames into a set of Song objects
 - allow user to pass in blacklisted keywords
-- make this an actual server
 - uncover inevitable security flaw
-- client side
 - pretty things up
-- client/server interaction™
 - host this somewhere
+
+completed (kinda):
+- turn songNames into a set of Song objects (not in curr version)
+- make this an actual server (localhost)
+- client side (started)
+- client/server interaction™
