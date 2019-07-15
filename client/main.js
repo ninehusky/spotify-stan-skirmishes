@@ -1,29 +1,21 @@
-(function (){
-  const SpotifyWebApi = require('spotify-web-api-node');
-  let spoitfyWebApi;
-  let url;
-  let accessToken = null; // maybe i shouldnt
-  const scopes = ['user-read-private', 'user-read-email'];
-  const state = 'some-state-of-my-choice';
+(function() {
 
   window.addEventListener('load', init);
 
   function init() {
-    document.getElementById('get-token').addEventListener('click', getToken);
-    spotifyWebApi = new SpotifyWebApi({
-      clientId: 'e7f6878314bd41d0ae49119dfc6e8174',
-      redirectUri: 'http://localhost:3000/auth/spotify/success'
-    });
+    document.getElementById('get-songs').addEventListener('click', getSongs)
   }
 
-  function getToken() {
-    console.log('ayooo');
-    url = spotifyWebApi.createAuthorizeURL(scopes, state);
-    window.open(url);
+  function getSongs() {
+    let artistName = document.getElementById('artist-name').value;
+    if (artistName.length === 0) {
+      console.log('no');
+      return;
+    } else {
+      fetch('http://localhost:3000/getsongs?artist=' + artistName)
+        .then((data) => data.json())
+        .then(console.log)
+        .catch(console.error);
+    }
   }
-
-  function parseToken(token) {
-    accessToken = token; //TODO: cookie?????
-  }
-
 }());
