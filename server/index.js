@@ -46,7 +46,7 @@ app.get('/getartist', function(req, res) {
   }
 });
 
-app.get('/getsongs', function(req, res) {
+app.get('/getalbums', function(req, res) {
   if (!req.query.artist) {
     return res.status(400).send({
       message: 'No artist param passed!'
@@ -63,7 +63,6 @@ app.get('/getsongs', function(req, res) {
             name: album.name,
             id: album.id,
             imgUrl: album.images[0].url,
-            // songs: Array() // lol i like to do [] but i wanted to flex
           }
             albumObjs.push(albumObj);
         });
