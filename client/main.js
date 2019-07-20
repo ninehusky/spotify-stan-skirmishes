@@ -33,7 +33,7 @@
     if (!id) {
       console.error('oops, no id');
     } else {
-      fetch(URL_BASE + 'getalbums?artist=' + id)
+      fetch(URL_BASE + 'getsongs?artist=' + id)
         .then(data => data.json())
         .then(displayAlbumData)
         .catch(console.error);
@@ -47,18 +47,6 @@
     while (albumContainer.hasChildNodes()) {
       albumContainer.removeChild(albumContainer.firstChild);
     }
-    albumList.forEach(album => {
-      let li = document.createElement('li');
-      li.id = album.id;
-      let container = document.createElement('div');
-      let albumArt = document.createElement('img');
-      let albumName = document.createElement('p');
-      albumArt.src = album.imgUrl;
-      albumName.innerText = album.name;
-      container.appendChild(albumName);
-      container.appendChild(albumArt);
-      li.appendChild(container);
-      document.getElementById('album-data').appendChild(li);
     });
   }
 }());
