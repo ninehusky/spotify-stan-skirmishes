@@ -66,29 +66,35 @@ app.get('/getsongs', function(req, res) {
 });
 
 // returns array of songObjs
-async function getSongs(albumObjs) {
-  let songObjs = [];
+async function getSongs(albums) {
+  let albumObjs = [];
   let promises = [];
-  for (const albumObj of albumObjs) {
-    await addSongs(albumObj, songObjs);
+  for (const album of albums) {
+    await addSongs(album, albumObjs);
   }
 
   await Promise.all(promises);
-  return songObjs;
+  return albumObjs;
 }
 
-async function addSongs(album, songObjs) {
+async function addSongs(album, albumObjs) {
     let songs = await spotifyApi.getAlbumTracks(album.id);
     songs = songs.body.items;
+    let songObjs = [];
     for (const song of songs) {
       let songObj = {
         name: song.name,
         album: album.name,
-        imgUrl: album.images[0].url
+        img_url: album.images[0].url
       }
       songObjs.push(songObj);
     }
-    console.log(songObjs.length);
+    let albumObj = {
+      name: album.name,
+      img_url: album.images[0].url,
+      song_list: songObjs
+    }
+    albumObjs.push(albumObj);
 }
 
 // TODO: make maybe this synchronous such that other funcs can't
