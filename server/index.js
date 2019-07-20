@@ -46,7 +46,7 @@ app.get('/getartist', function(req, res) {
   }
 });
 
-app.get('/getalbums', function(req, res) {
+app.get('/getsongs', function(req, res) {
   if (!req.query.artist) {
     return res.status(400).send({
       message: 'No artist param passed!'
@@ -56,33 +56,39 @@ app.get('/getalbums', function(req, res) {
       .then(data => {
         return data.body.items;
       })
-      .then(albums => {
-        let albumObjs = [];
-        albums.forEach(album => {
-          let albumObj = {
-            name: album.name,
-            id: album.id,
-            imgUrl: album.images[0].url,
-          }
-            albumObjs.push(albumObj);
-        });
-        return albumObjs;
+      .then(getSongs)
+      .then(data => {
+        console.log('Final length: ' + data);
+        res.send(data);
       })
-      .then(cleanse)
-      .then(data => res.send(data))
       .catch(error);
   }
 });
 
-function cleanse(items) {
-  for (let i = 0; i < items.length; i++) {
-    for (let j = i + 1; j < items.length; j++) {
-      if (items[i].name === items[j].name) {
-        items.splice(j--, 1);
-      }
-    }
+// returns array of songObjs
+async function getSongs(albumObjs) {
+  let songObjs = [];
+  let promises = [];
+  for (const albumObj of albumObjs) {
+    await addSongs(albumObj, songObjs);
   }
-  return items;
+
+  await Promise.all(promises);
+  return songObjs;
+}
+
+async function addSongs(album, songObjs) {
+    let songs = await spotifyApi.getAlbumTracks(album.id);
+    songs = songs.body.items;
+    for (const song of songs) {
+      let songObj = {
+        name: song.name,
+        album: album.name,
+        imgUrl: album.images[0].url
+      }
+      songObjs.push(songObj);
+    }
+    console.log(songObjs.length);
 }
 
 // TODO: make maybe this synchronous such that other funcs can't
