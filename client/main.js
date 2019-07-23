@@ -4,61 +4,58 @@
 
   const URL_BASE = 'http://localhost:3000/'
   let id = null;
+  let songData = null;
 
   function init() {
-    document.getElementById('get-artist').addEventListener('click', getArtist);
-    document.getElementById('get-albums').addEventListener('click', getAlbums);
+    document.getElementById('skirmish').addEventListener('click', createCards);
+    fetch(URL_BASE + 'getsongs?artist=5K4W6rqBFWDnAN6FQUkS6x')
+      .then((data) => data.json())
+      .then((data) => {
+        console.log(data);
+        songData = data;
+      })
+      .catch(console.error);
   }
 
-  function getArtist() {
-    let artistName = document.getElementById('artist-name').value;
-    if (artistName.length === 0) {
-      console.log('lol');
+  function createCards() {
+    document.getElementById('display').innerText = ''; // doesn't this leak memory?
+    if (songData) {
+      let song1 = randArray(randArray(songData)['song_list']); // oh god
+      let song2;
+      do {
+        song2 = randArray(randArray(songData)['song_list']); // this seems bad
+      } while (song1 === song2);
+      document.getElementById('display').appendChild(createCard(song1));
+      document.getElementById('display').appendChild(createCard(song2));
     } else {
-      fetch(URL_BASE + 'getartist?artist=' + artistName)
-        .then(data => data.json())
-        .then(displayArtistData)
-        .catch(console.error);
+      document.getElementById('display').innerText = 'oops there was an error.'; // this ought to keep em at bay
     }
   }
 
-  function displayArtistData(data) {
-    id = data.id;
-    document.getElementById('artist-pic').src = data.img;
-    document.getElementById('artist-name').innerText = data.name;
-    getAlbums(); // this is for debug, i'm too lazy to keep clicking
+  // i sure do miss JSX
+  function createCard(songObj) {
+    let div = document.createElement('div');
+    div.classList.add('card');
+    div.classList.add('w-25');
+    let info = document.createElement('div');
+    info.classList.add('card-body');
+    info.innerText = `${songObj.name} from ${songObj.album}`
+    let albumArt = document.createElement('img');
+    albumArt.src = songObj['img_url'];
+    albumArt.alt = songObj.album + ' album art';
+    albumArt.classList.add('card-image-bottom');
+    div.appendChild(albumArt);
+    div.appendChild(info);
+    return div;
   }
 
-  function getAlbums() {
-    if (!id) {
-      console.error('oops, no id');
-    } else {
-      fetch(URL_BASE + 'getalbums?artist=' + id)
-        .then(data => data.json())
-        .then(displayAlbumData)
-        .catch(console.error);
-    }
-  }
-
-  // wow. this could be so fun in react but instead i'm here using my
-  // favorite framework at all, vanillaJS.
-  function displayAlbumData(albumList) {
-    let albumContainer = document.getElementById('album-data');
-    while (albumContainer.hasChildNodes()) {
-      albumContainer.removeChild(albumContainer.firstChild);
-    }
-    albumList.forEach(album => {
-      let li = document.createElement('li');
-      li.id = album.id;
-      let container = document.createElement('div');
-      let albumArt = document.createElement('img');
-      let albumName = document.createElement('p');
-      albumArt.src = album.imgUrl;
-      albumName.innerText = album.name;
-      container.appendChild(albumName);
-      container.appendChild(albumArt);
-      li.appendChild(container);
-      document.getElementById('album-data').appendChild(li);
-    });
+  // i feel like it's actually ridiculous how this isn't built into js
+  /**
+   * @param arr - array to be selected from
+   * @return A random element in the given array
+   */
+  function randArray(arr) {
+    let index = Math.floor(Math.random() * arr.length);
+    return arr[index];
   }
 }());

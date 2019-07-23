@@ -3,23 +3,58 @@
   <head>
     <meta charset="utf-8">
     <title>Stan Skirmish!</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css"/>
     <script src="main.js"></script>
   </head>
   <body>
-    <article id="info">
-      <input id="artist-name" type="text">
-      <button id="get-artist">Get Artist</button>
-    </article>
-    <article>
-      <h1>Response:</h1>
-      <img id="artist-pic">
-      <p>Your artist is: <span id="artist-name"></span></p>
-      <button id="get-albums">Get Albums</button>
-    </article>
-    <article id="albums">
-      <h2>Albums:</h2>
-      <ul id="album-data">
-      </ul>
-    </article>
+    <nav class="navbar">
+        <a class="navbar-brand" href="https://ninehusky.github.io">
+          ninedawg industries!
+        </a>
+        <ul class="nav navbar-default justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/ninehusky/spotify-stan-skirmishes/">
+              skirmish-github
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 class="jumbotron-heading">Stan Skirmishes!</h1>
+          <p class="w-75 mx-auto text-center lead text-muted">
+            This is the most exciting music-based competition since battle rapping.
+            Participate in the fun within the comfort, safety, and privacy of your own home.
+          </p>
+          <p class="text-center lead text-muted">
+            (in alpha only kanye's available haha.)
+          </p>
+          <p>
+            <button type="button" class="btn btn-primary" id="skirmish">
+              skirmish!
+            </button>
+          </p>
+        </div>
+      </section>
+      <section id="display">
+      </section>
+      <!-- <nav class="navbar fixed-bottom">
+        this has been a short film by kenny 'nintendawg' zhang
+        <ul class="nav navbar-default justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/ninehusky">github</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">tweeter</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">youtube</a>
+          </li>
+        </ul>
+      </nav> -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>

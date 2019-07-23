@@ -1,0 +1,10 @@
+img {
+  width: 100%;
+  height: auto;
+}
+
+#display {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
