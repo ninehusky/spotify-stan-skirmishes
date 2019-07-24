@@ -5,21 +5,45 @@
   const URL_BASE = 'http://localhost:3000/'
   let id = null;
   let songData = null;
+  let gameData = null;
 
   function init() {
-    document.getElementById('skirmish').addEventListener('click', createCards);
-    fetch(URL_BASE + 'getsongs?artist=5K4W6rqBFWDnAN6FQUkS6x')
-      .then((data) => data.json())
-      .then((data) => {
-        console.log(data);
-        songData = data;
-      })
+    document.getElementById('lookup').addEventListener('click', getArtistData);
+    document.getElementById('skirmish').addEventListener('click', getSongData);
+  }
+
+  function getArtistData() {
+    fetch(URL_BASE + 'getartist?artist=' + document.getElementById('artist-name').value)
+      .then(data => data.json())
+      .then(displayArtistData)
       .catch(console.error);
+  }
+
+  function displayArtistData(response) {
+    id = response.id;
+    document.getElementById('artist-image').src = response.img;
+    document.getElementById('display-artist-name').innerText = response.name;
+    document.getElementById('artist-display').classList.remove('hidden');
+  }
+
+  function getSongData() {
+    if (id) {
+      fetch(URL_BASE + 'getsongs?artist=' + id)
+        .then(data => data.json())
+        .then(displaySongData)
+        .catch(console.error);
+    }
+  }
+
+  function displaySongData(response) {
+    songData = response;
+    createCards();
   }
 
   function createCards() {
     document.getElementById('display').innerText = ''; // doesn't this leak memory?
     if (songData) {
+      console.log('starting...');
       let song1 = randArray(randArray(songData)['song_list']); // oh god
       let song2;
       do {

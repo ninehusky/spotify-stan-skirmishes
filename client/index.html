@@ -28,13 +28,19 @@
             Participate in the fun within the comfort, safety, and privacy of your own home.
           </p>
           <p class="text-center lead text-muted">
-            (in alpha only kanye's available haha.)
+            find your artist, then hit skirmish!
           </p>
-          <p>
-            <button type="button" class="btn btn-primary" id="skirmish">
-              skirmish!
-            </button>
-          </p>
+          <div id="controls mx-auto">
+            <input required type="text" class="w-50" id="artist-name" placeholder="Enter name here"></input>
+            <button class="btn btn-primary" id="lookup">artist lookup</button>
+          </div>
+        </div>
+      </section>
+      <section class="hidden text-center" id="artist-display">
+        <div class="card">
+          <h2><span id="display-artist-name"></span></h2>
+          <img class="w-25 mx-auto" id="artist-image"/>
+          <button id="skirmish" class="w-25 mx-auto btn btn-primary">skirmish!</button>
         </div>
       </section>
       <section id="display">
