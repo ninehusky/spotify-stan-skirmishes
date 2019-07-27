@@ -58,7 +58,6 @@ app.get('/getsongs', function(req, res) {
       })
       .then(getSongs)
       .then(data => {
-        console.log('Final length: ' + data);
         res.send(data);
       })
       .catch(error);
