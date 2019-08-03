@@ -1,3 +1,17 @@
 .card {
     text-align: center;
 }
+
+.root {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+
+#button-holder {
+    display: flex;
+    justify-content: space-between;
+}
