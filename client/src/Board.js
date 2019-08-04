@@ -12,17 +12,6 @@ class Board extends Component {
         };
     }
     
-    componentDidMount() {
-        //   fetch(URL_BASE + 'getartist?artist=kanye')
-        //       .then(response => response.json())
-        //       .then(data => this.setState({
-        //           hits: data,
-        //           isLoading: false,
-        //           hidden: true, // we finna use this later
-        //       }))
-        //       .catch(console.error);
-    }
-
     artistSearch = (artist) => {
         // probably should scan to see if string is empty
         fetch(URL_BASE + 'getartist?artist=' + artist)
@@ -37,17 +26,60 @@ class Board extends Component {
     makeChoice = (choice) => {
         this.setState({
             isLoading: !choice, // if user chose 'yes', we are no longer loading.
+            choiceMade: choice, // if user chose 'yes', the choice has been made.
         });
     }
 
     render() {
         if (this.state.isLoading) {
-            console.log(this.state.isLoading);
-            return <SearchCard artistSearch={this.artistSearch}/>
+            return <SearchCard artistSearch={this.artistSearch}/>;
+        } else if (this.state.choiceMade) {
+            return <GameBoard artistData={ this.state.artistData }/>;
         } else {
             return(
                 <ArtistCard artistData={ this.state.artistData }
                             makeChoice={ this.makeChoice }/>
+            );
+        }
+    }
+}
+
+class GameBoard extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            artistData: this.props.artistData,
+            isLoading: true,
+        };
+    }
+
+    componentDidMount() {
+        fetch(URL_BASE + 'getsongs?artist=' + this.state.artistData.id)
+            .then((data) => data.json())
+            .then((data) => this.parseSongData(data))
+            .catch(console.error);
+    }
+
+    parseSongData(data) {
+        this.setState({
+            isLoading: false,
+            songData: data,
+        });
+    }
+
+    render() {
+        if (this.state.isLoading) {
+            return <h1>Loading...</h1>;
+        } else {
+            console.log(this.state.songData);
+            return(
+                <div id="gameboard">
+                {
+                    this.state.songData.map((album, i) => {
+                        return <p key={i}>{album.name}</p>;
+                    })
+                }
+                </div>
             );
         }
     }
@@ -95,7 +127,6 @@ class ArtistCard extends Component {
         super(props);
         this.state = {
             data: this.props.artistData,
-            choice: null,
         }
     }
 
